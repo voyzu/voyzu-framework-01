@@ -1,0 +1,45 @@
+{
+  "name": "voyzu-framework-01",
+  "version": "0.1.0",
+  "description": "Voyzu Framework library version 0.1",
+  "author": "Chris Lennon",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/voyzu-app/voyzu-framework-01.git"
+  },
+  "license": "MIT",
+  "files": [
+    "/src",
+    "index.js"
+  ],
+  "scripts": {
+    "docs": "jsdoc2md --files 'src/**' > api.md",
+    "lint": "cd src && npx eslint . --fix",
+    "update-deps": "npx updates -e traverse -m -u && npm install"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "eslint": "^9.17.0",
+    "eslint-plugin-jsdoc": "^50.6.1",
+    "eslint-plugin-unicorn": "^56.0.1",
+    "globals": "^15.14.0",
+    "jsdoc-to-markdown": "^9.1.1",
+    "updates": "^16.4.1"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "date-fns": "^4.1.0",
+    "lru-cache": "^10.4.3",
+    "parse-json": "^8.1.0",
+    "pino": "^9.6.0",
+    "redis": "^4.7.0",
+    "simple-git": "^3.27.0",
+    "ssh2": "^1.16.0",
+    "traverse": "0.6.8",
+    "yargs": "^17.7.2"
+  }
+}
