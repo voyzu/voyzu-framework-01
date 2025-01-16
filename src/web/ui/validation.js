@@ -91,7 +91,8 @@ function checkControlValidity(control) {
 
     const valid = control.validity;
 
-    if (!valid.valid) {
+    // controls like sl-alert will have a validity of undefined. These are presumed to be valid.
+    if (valid !==undefined && !valid.valid) {
         isValid = false;
         if (valid.badInput) {
             displayInvalid(control, control.dataset.badInputMessage ?? 'bad input');
@@ -100,28 +101,28 @@ function checkControlValidity(control) {
             displayInvalid(control, control.dataset.customErrorMessage ?? 'custom error');
         }
         if (valid.patternMismatch) {
-            displayInvalid(control, control.dataset.patternMismatchMessage ?? `${control.dataset.label ?? control.id} does not match pattern ${control.pattern}`);
+            displayInvalid(control, control.dataset.patternMismatchMessage ?? `${control.dataset.label ?? control.label ?? control.id} does not match pattern ${control.pattern}`);
         }
         if (valid.rangeOverflow) {
-            displayInvalid(control, control.dataset.rangeOverflowMessage ?? `${control.dataset.label ?? control.id} exceeds maximum value ${control.max}`);
+            displayInvalid(control, control.dataset.rangeOverflowMessage ?? `${control.dataset.label ?? control.label ?? control.id} exceeds maximum value ${control.max}`);
         }
         if (valid.rangeUnderflow) {
-            displayInvalid(control, control.dataset.rangeUnderflowMessage ?? `${control.dataset.label ?? control.id} is lower than minimum value ${control.min}`);
+            displayInvalid(control, control.dataset.rangeUnderflowMessage ?? `${control.dataset.label ?? control.label ?? control.id} is lower than minimum value ${control.min}`);
         }
         if (valid.stepMismatch) {
-            displayInvalid(control, control.dataset.stepMismatchMessage ?? `${control.dataset.label ?? control.id} is not a valid step (${control.step})`);
+            displayInvalid(control, control.dataset.stepMismatchMessage ?? `${control.dataset.label ?? control.label ?? control.id} is not a valid step (${control.step})`);
         }
         if (valid.tooLong) {
-            displayInvalid(control, control.dataset.tooLongMessage ?? `${control.dataset.label ?? control.id} cannot be longer than ${control.maxlength} characters`);
+            displayInvalid(control, control.dataset.tooLongMessage ?? `${control.dataset.label ?? control.label ?? control.id} cannot be longer than ${control.maxlength} characters`);
         }
         if (valid.tooShort) {
-            displayInvalid(control, control.dataset.tooShortMessage ?? `${control.dataset.label ?? control.id} must be at least ${control.minlength} characters`);
+            displayInvalid(control, control.dataset.tooShortMessage ?? `${control.dataset.label ?? control.label ?? control.id} must be at least ${control.minlength} characters`);
         }
         if (valid.typeMismatch) {
-            displayInvalid(control, control.dataset.typeMismatchMessage ?? `${control.dataset.label ?? control.id} is not a valid ${control.type}`);
+            displayInvalid(control, control.dataset.typeMismatchMessage ?? `${control.dataset.label ?? control.label ?? control.id} is not a valid ${control.type}`);
         }
         if (valid.valueMissing) {
-            displayInvalid(control, control.dataset.valueMissingMessage ?? `${control.dataset.label ?? control.id} is required`);
+            displayInvalid(control, control.dataset.valueMissingMessage ?? `${control.dataset.label ?? control.label ?? control.id} is required`);
         }
     }
 
@@ -141,13 +142,19 @@ function displayInvalid(control, text) {
         invalidMessageDiv.remove();
     }
 
-    // Add invalid message
-    const div = document.createElement('div');
-    div.id = 'invalid-message-div';
-    div.innerText = text;
-    div.style.cssText = 'color:var(--sl-color-danger-500);font-size:var(--sl-input-help-text-font-size-medium);font-weight:bold';
+    // show the invalid message in the help text
+    // this is not ideal as it will overwrite any actual help text.
+    // doing this as a work around
+    control.helpText = text
+
+    // the below code shows what I'd like to do, but I can't get it to work reliably
+    // // Add invalid message
+    // const div = document.createElement('div');
+    // div.id = 'invalid-message-div';
+    // div.innerText = text;
+    // div.style.cssText = 'color:var(--sl-color-danger-500);font-size:var(--sl-input-help-text-font-size-medium);font-weight:bold';
     
-    control.after(div);
+    // control.after(div);
 
 }
 
