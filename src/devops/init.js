@@ -33,10 +33,14 @@ import * as log from './log.js';
  */
 export async function initializeComponent(createConfig = false, createRedisClient = true, componentDirIn) {
 
-    const thisPkg = require('../../package.json'); //Top level package
+    // display framework welcome message
+    const thisDir = url.fileURLToPath(new URL('.', import.meta.url));
+    const thisPkgPath = path.join (thisDir,'../../package.json');
+    const thisPkg = require(thisPkgPath);
     console.log(`[${thisPkg.name}] Welcome to Voyzu Framework version ${thisPkg.version} :-)`);
 
     // Calling component
+    console.log (process.cwd())
     const componentDir = componentDirIn ?? process.cwd();
 
     const logDir = path.join(componentDir, 'logs');
