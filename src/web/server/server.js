@@ -280,7 +280,23 @@ async function processRequest(req, res, body, entryModule, entryModulePath, cont
     } else if (httpResponse.response_type === HTTP_RESPONSE_TYPE.JSON) {
         res.end(JSON.stringify(httpResponse.response_data));
     } else {
-        res.end(httpResponse.response_data);
+        try {
+            res.end(httpResponse.response_data);
+        } catch (error) {
+            // this error can occur if the response data is an object and not a string or Buffer.
+            console.error(chalk.magenta(`There was an error serving the httpResponse.response_data. Is it the correct type?`));
+            let err = util.inspect(error, { depth: null });
+            console.error(chalk.magenta(err));
+
+            if (req.headers["user-agent"].toLowerCase().startsWith("mozilla")) {
+                err = err.replaceAll(/\r?\n/g, "<br>");
+                err = err.replaceAll('\t', "&nbsp;");
+                err = err.replaceAll(" ", "&nbsp;");
+            }
+
+            res.end(err);
+            return;
+        }
     }
 
     console.log(chalk.gray(`[${pkg.name}] [server] [debug] served ${req.method} ${req.url} with ${httpResponse.http_code} in ${Date.now() - start} ms`));
